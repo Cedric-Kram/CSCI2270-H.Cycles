@@ -12,19 +12,21 @@ struct Vertex{
 
 struct VertexLLNode{
   Vertex *v;
-  Vertex *next = NULL;
-  Vertex *prev = NULL;
-  VertexLLNode(Vertex *t){v = t;}
+  VertexLLNode *next = NULL;
+  VertexLLNode *prev = NULL;
 }
 
 class VertexLL{
   private:
-    VertexLLNode head(NULL);
-    VertexLLNode tail(NULL):
+    VertexLLNode* head;
+    VertexLLNode* tail:
   public:
     VertexLL();
     ~VertexLL();
-    void append(Vertex *v);
+    void append(Vertex *n);
     void remove(int id);
-    VertexLLNode findVertexNode(int id);
+    VertexLLNode* findVertexNode(int id);
+    void printLL();
+    VertexLLNode* getHead();
+    VertexLLNode* getTail();
 }
