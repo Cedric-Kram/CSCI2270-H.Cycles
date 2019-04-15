@@ -1,4 +1,4 @@
-#include "LL.hpp"
+#include "Structs.hpp"
 #include <iostream>
 using namespace std;
 
@@ -10,7 +10,13 @@ VertexLL::VertexLL(){
 }
 
 VertexLL::~VertexLL(){
-  
+  VertexLLNode* temp1 = head;
+  VertexLLNode* temp2;
+  while(temp1 != NULL){
+    temp2 = temp1;
+    temp1 = temp1->next;
+    delete temp2;
+  }
 }
 
 void VertexLL::append(Vertex *n){
@@ -83,3 +89,55 @@ void VertexLL::printLL(){
     t = t->next;
   }
 }
+
+//Stack
+
+VertexStack::VertexStack(int mSize){
+  maxSize = mSize;
+  currSize = 0;
+  stack = new Vertex*[maxSize];
+}
+
+VertexStack::~VertexStack(){
+  delete[] stack;
+}
+
+bool VertexStack::isFull(){
+  if(currSize == maxSize){
+    return true;
+  }
+  return false;
+}
+
+bool VertexStack::isEmpty(){
+  if(currSize == 0){
+    return true;
+  }
+  return false;
+}
+
+void VertexStack::push(Vertex *v){
+  if(isFull()){
+    return; 
+  }
+  stack[currSize] = v;
+  currSize++;
+}
+
+void VertexStack::pop(){
+  if(isEmpty()){
+    return;
+  }
+  currSize--;
+}
+
+Vertex* VertexStack::peek(){
+  return stack[currSize - 1];
+}
+
+void VertexStack::printStack(){
+  for(int i = 0; i < currSize; i++){
+    cout << stack[i]->id << endl; 
+  }
+}
+
