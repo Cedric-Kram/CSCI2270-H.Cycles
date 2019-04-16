@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 using namespace std;
 
 //General Vertex struct to be used in other data structures
@@ -9,6 +10,10 @@ struct Vertex{
   Vertex(int num){id = num;}
   vector<Vertex*> edges;
 };
+
+//Matrix struct
+
+struct 
 
 //Linked list stuff
 
