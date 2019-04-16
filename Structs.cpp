@@ -1,6 +1,27 @@
 #include "Structs.hpp"
 using namespace std;
 
+//Matrix structors
+
+BoolMat::BoolMat(int r, int c){
+  rows = r;
+  cols = c;
+  mat = new bool*[rows];
+  for(i = 0; i < rows; i++){
+    mat[i] = new bool[cols];
+    for(j = 0; j < cols; j++){
+      mat[i][j] = false; 
+    }
+  }
+}
+
+BootMat::~BoolMat(){
+  for(int i = 0; i < rows; i++){
+    delete[] mat[i]; 
+  }
+  delete[] mat;
+}
+
 //Linked list
 
 VertexLL::VertexLL(){
@@ -94,7 +115,7 @@ void VertexLL::printLL(){
 VertexStack::VertexStack(int mSize){
   maxSize = mSize;
   currSize = 0;
-  stack = new Vertex*[maxSize];
+  stack = new Vertex[maxSize];
 }
 
 VertexStack::~VertexStack(){
@@ -139,4 +160,3 @@ void VertexStack::printStack(){
     cout << stack[i]->id << endl; 
   }
 }
-
