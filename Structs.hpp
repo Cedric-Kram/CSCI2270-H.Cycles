@@ -11,9 +11,15 @@ struct Vertex{
   vector<Vertex*> edges;
 };
 
-//Matrix struct
+//Bool Matrix struct
 
-struct 
+struct BoolMat{
+  int rows;
+  int cols;
+  bool **mat;
+  BoolMat(int r, int c);
+  ~BoolMat();
+};
 
 //Linked list stuff
 
@@ -44,7 +50,7 @@ class VertexStack{
   private:
     int maxSize;
     int currSize;
-    Vertex **stack;
+    Vertex *stack;
   public:
     VertexStack(int mSize);
     ~VertexStack();
@@ -54,4 +60,22 @@ class VertexStack{
     void pop();
     Vertex* peek();
     void printStack();
+};
+
+//Queue stuff
+
+class VertexQueue{
+  private:
+    int maxSize;
+    int currSize;
+    Vertex *q;
+  public:
+    VertexQueue(int mSize);
+    ~VertexQueue();
+    bool isFull();
+    bool isEmpty();
+    void push(Vertex *v);
+    void pop();
+    Vertex* peek();
+    void printQueue();
 };
