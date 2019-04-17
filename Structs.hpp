@@ -36,7 +36,8 @@ class VertexLL{
   public:
     VertexLL();
     ~VertexLL();
-    void append(Vertex *n);
+    void append(Vertex +
+                n);
     void remove(int id);
     VertexLLNode* findVertexNode(int id);
     void printLL();
@@ -56,9 +57,9 @@ class VertexStack{
     ~VertexStack();
     bool isFull();
     bool isEmpty();
-    void push(Vertex *v);
+    void push(Vertex v);
     void pop();
-    Vertex* peek();
+    Vertex peek();
     void printStack();
 };
 
@@ -68,6 +69,8 @@ class VertexQueue{
   private:
     int maxSize;
     int currSize;
+    int headIndex;
+    int tailIndex;
     Vertex *q;
   public:
     VertexQueue(int mSize);
