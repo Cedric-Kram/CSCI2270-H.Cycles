@@ -44,7 +44,7 @@ void VertexLL::append(Vertex *n){
     return; 
   }
   VertexLLNode *newVertex;
-  newVertex->v = n;
+  newVertex->v = &n;
   if(head == NULL){
     head = newVertex;
     tail = newVertex;
@@ -136,7 +136,7 @@ bool VertexStack::isEmpty(){
   return false;
 }
 
-void VertexStack::push(Vertex *v){
+void VertexStack::push(Vertex v){
   if(isFull()){
     return; 
   }
@@ -151,7 +151,7 @@ void VertexStack::pop(){
   currSize--;
 }
 
-Vertex* VertexStack::peek(){
+Vertex VertexStack::peek(){
   return stack[currSize - 1];
 }
 
@@ -160,3 +160,46 @@ void VertexStack::printStack(){
     cout << stack[i]->id << endl; 
   }
 }
+
+VertexQueue(int mSize){
+  maxSize = mSize;
+  headIndex = 0;
+  tailIndex = 0;
+  currSize = 0;
+  q = new Vertex[maxSize];
+}
+
+~VertexQueue(){
+  delete[] q;
+}
+
+bool isFull(){
+  if(currSize == maxSize){
+    return true; 
+  }
+  return false;
+}
+
+bool isEmpty(){
+  if(currSize == 0){
+    return true; 
+  }
+  return false;
+}
+
+void push(Vertex *v){
+  
+}
+
+void pop(){
+  
+}
+
+Vertex* peek(){
+  
+}
+
+void printQueue(){
+  
+}
+
