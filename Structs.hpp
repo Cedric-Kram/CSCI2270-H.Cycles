@@ -9,6 +9,7 @@ using namespace std;
 struct Vertex{
   int id;
   bool visited = false;
+  bool valid = true;
   Vertex(int num){id = num;}
   Vertex(){};
   vector<Vertex*> edges;
@@ -23,6 +24,7 @@ struct BoolMat{
   BoolMat(int r, int c);
   BoolMat(){};
   ~BoolMat();
+  //bool checkNilpotence();
 };
 
 //Linked list stuff
@@ -62,7 +64,7 @@ class VertexStack{
     bool isEmpty();
     void push(Vertex v);
     void pop();
-    Vertex peek();
+    Vertex* peek();
     void printStack();
 };
 
@@ -84,6 +86,24 @@ class VertexQueue{
     void pop();
     Vertex* peek();
     void printQueue();
+};
+
+class Graph{
+  private:
+    int graphSize;
+    Vertex *vertices;
+  public:
+    //Constructor will take pointer to adjacency matrix as pointer, will construct graph from this
+    Graph();
+    ~Graph();
+    void addVertex(Vertex v);
+    void addEdge(Vertex v1, Vertex v2);
+    //Finds index of vertex in vertices array
+    int findVertex(Vertex v);
+    void setVertsUnvisited();
+    void setVertsValid();
+    bool checkConnectivity(Vertex v);
+    VertexStack findHamiltonian(Vertex v);
 };
 
 class Driver{
