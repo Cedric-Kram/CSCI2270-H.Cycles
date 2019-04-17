@@ -1,13 +1,1 @@
--I was thinking that we could just have a utitlity function in the driver file that generates random adjacency
-  matrices (hence random graphs)
 
--Im not quite sure what you mean with these comments:
-  // I think the scope could be a tad funky here,
-  // Since we are in the heap with the storage of the vertex
-  // We need to make sure the v is poiting to vertex that is also in the heap
-  // Otherwise this will be gross.
-  
-  
-
-  
-  
