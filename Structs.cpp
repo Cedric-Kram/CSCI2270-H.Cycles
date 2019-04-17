@@ -1,6 +1,23 @@
 #include "Structs.hpp"
 using namespace std;
 
+//Core functions of program
+//Or we can skip this
+bool BoolMat::checkNilpotence(){
+  
+}
+
+//Checks if graph is connected
+bool Graph::checkConnectivity(Vertex v){
+  int index = findVertex(v);
+  
+}
+
+//Finds hamiltonian starting at v
+VertexStack Graph::findHamiltonian(Vertex v){
+  
+}
+
 //Matrix structors
 
 BoolMat::BoolMat(int r, int c){
@@ -161,7 +178,7 @@ void VertexStack::pop(){
 By adding the [] this is derferencing the vertex so it will be returning the last value.
 
 */
-Vertex VertexStack::peek(){
+Vertex* VertexStack::peek(){
   return stack[currSize - 1];
 }
 
