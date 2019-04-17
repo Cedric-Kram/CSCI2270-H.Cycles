@@ -216,6 +216,13 @@ Driver::Driver(std::string file){
   reader.clear();
   reader.seekg(0, ios::beg);
   while(std::getline(reader,line)){
-
+    std::istringstream ss(line);
+    while(std::getline(ss,status,',')){
+      if(std::stoi(status)){
+        adjacencyMatrix.mat[row][col] = true;
+      } else {
+        adjacencyMatrix.mat[row][col] = false;
+      }
+    }
   }
 }
