@@ -13,6 +13,8 @@ struct Vertex{
   Vertex(int num){id = num;}
   Vertex(){};
   vector<Vertex*> edges;
+  vector<Vertex> invalids;
+  bool isInvalid(Vertex v);
 };
 
 //Bool Matrix struct
@@ -67,6 +69,7 @@ class VertexStack{
     Vertex* peek();
     Vertex* front();
     void printStack();
+    bool inStack(Vertex v);
 };
 
 //Queue stuff
