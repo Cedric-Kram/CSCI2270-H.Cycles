@@ -213,6 +213,82 @@ void VertexStack::printStack(){
     cout << stack[i].id << endl;
   }
 }
+/*
+    int maxSize;
+    int currSize;
+    int headIndex;
+    int tailIndex;
+    Vertex *q;
+*/
+VertexQueue::VertexQueue(int mSize){
+  maxSize = mSize;
+  currSize = 0;
+  headIndex = 0;
+  tailIndex = 0;
+  q = new Vertex[maxSize];
+}
+
+VertexQueue::~VertexQueue(){
+  delete[] q;
+}
+
+bool VertexQueue::isFull(){
+  if(currSize == maxSize){
+    return true;
+  }
+  return false;
+}
+
+bool VertexQueue::isEmpty(){
+  if(currSize == 0){
+    return true;
+  }
+  return false;
+}
+
+void VertexQueue::push(Vertex v){
+  if(isFull()){
+    return; 
+  }
+  else{
+    q[tailIndex] = v;
+    if(tailIndex == maxSize - 1){
+      tailIndex = 0;
+    }
+    else{
+      tailIndex++;
+    }
+  }
+  currSize++;
+}
+
+void VertexQueue::pop(){
+  if(isEmpty()){
+    return;
+  }
+  else if(headIndex == maxSize - 1){
+    headIndex = 0;
+  }
+  else{
+    headIndex++;
+  }
+  currSize--;
+}
+
+Vertex* VertexQueue::peek(){
+  return q[tailIndex];
+}
+
+Vertex* VertexQueue::front(){
+  return q[headIndex];
+}
+
+void VertexQueue::printQueue(){
+  for(int i = 0; i < currSize; i++){
+    cout << q[v].id << endl; 
+  }
+}
+
 
 Graph::Graph(int graphSize){
   this->graphSize = graphSize;
