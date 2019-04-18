@@ -14,8 +14,30 @@ bool Graph::checkConnectivity(Vertex v){
 }
 
 //Finds hamiltonian starting at v
-VertexStack Graph::findHamiltonian(Vertex v){
-
+void Graph::findHamiltonian(Vertex v, VertexStack &s){
+  s.push(v);
+  v.valid = false;
+  for(int i = 0; i < v.edges.size(); i++){
+     if(v.edges[i].valid){
+       findHamiltonian(v.edges[i]);
+     }
+  }
+  if(s.isFull()){
+    Vertex *top = s.peek();
+    Vertex *front = s.front();
+    for(int j = 0; j < top->edges.size(); j++){
+      if(top->edges[j] == front){
+        return;
+      }
+    }
+  }
+  s.pop();
+  if(s.isEmpty()){
+    return; 
+  }
+  Vertex *top = s.peek();
+  top->valid = true;
+  findHamiltonian(*top, s);
 }
 
 //Matrix structors
@@ -182,6 +204,10 @@ Vertex* VertexStack::peek(){
   return stack[currSize - 1];
 }
 
+Vertex* VertexStack::front(){
+  return stack[0]; 
+}
+
 void VertexStack::printStack(){
   for(int i = 0; i < currSize; i++){
     cout << stack[i].id << endl;
@@ -215,7 +241,7 @@ void Graph::setVertsUnvisited(){
 
 void Graph::setVertsValid(){
   for(int i = 0, i < graphSize, i++){
-    vertices[i].valid = false;
+    vertices[i].valid = true;
   }
 }
 
