@@ -91,13 +91,15 @@ class VertexQueue{
 class Graph{
   private:
     int graphSize;
+    int currentSize; // Just for loading purposes
+    //With this array of Vertex we will have a fixed sized
     Vertex *vertices;
-  public:
-    //Constructor will take pointer to adjacency matrix as pointer, will construct graph from this
-    Graph();
-    ~Graph();
     void addVertex(Vertex v);
     void addEdge(Vertex v1, Vertex v2);
+  public:
+    //Constructor will take pointer to adjacency matrix as pointer, will construct graph from this
+    Graph(int);
+    ~Graph();
     //Finds index of vertex in vertices array
     int findVertex(Vertex v);
     void setVertsUnvisited();

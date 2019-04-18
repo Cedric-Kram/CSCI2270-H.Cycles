@@ -4,18 +4,18 @@ using namespace std;
 //Core functions of program
 //Or we can skip this
 bool BoolMat::checkNilpotence(){
-  
+
 }
 
 //Checks if graph is connected
 bool Graph::checkConnectivity(Vertex v){
   int index = findVertex(v);
-  
+
 }
 
 //Finds hamiltonian starting at v
 VertexStack Graph::findHamiltonian(Vertex v){
-  
+
 }
 
 //Matrix structors
@@ -187,6 +187,39 @@ void VertexStack::printStack(){
     cout << stack[i].id << endl;
   }
 }
+
+Graph::Graph(int graphSize){
+  this->graphSize = graphSize;
+  vertices = new Vertex[graphSize];
+  currentSize = 0;
+}
+
+Graph::~Graph(){delete vertices[]}
+
+void Graph::addVertex(Vertex v){
+  if(currentSize >= graphSize){
+    vertices[currentSize] = v;
+    currentSize++;
+  }
+}
+
+void Graph::addEdge(Vertex v1, Vertex v2){
+  v1.edges.push_back(v2);
+}
+
+void Graph::setVertsUnvisited(){
+  for(int i = 0, i < graphSize, i++){
+    vertices[i].visited = false;
+  }
+}
+
+void Graph::setVertsValid(){
+  for(int i = 0, i < graphSize, i++){
+    vertices[i].valid = false;
+  }
+}
+
+
 //For Constructor
 int split (std::string str, char c, std::string storage[])
 {
