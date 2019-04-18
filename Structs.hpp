@@ -65,6 +65,7 @@ class VertexStack{
     void push(Vertex v);
     void pop();
     Vertex* peek();
+    Vertex* front();
     void printStack();
 };
 
@@ -85,6 +86,7 @@ class VertexQueue{
     void push(Vertex v);
     void pop();
     Vertex* peek();
+    Vertex* front();
     void printQueue();
 };
 
@@ -105,7 +107,7 @@ class Graph{
     void setVertsUnvisited();
     void setVertsValid();
     bool checkConnectivity(Vertex v);
-    VertexStack findHamiltonian(Vertex v);
+    void findHamiltonian(Vertex v, VertexStack &s);
 };
 
 class Driver{
