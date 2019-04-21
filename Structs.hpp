@@ -15,7 +15,7 @@ struct Vertex{
   vector<Vertex*> edges;
   vector<Vertex*> invalids;
   bool isInvalid(Vertex *v);
-  
+  void clearInvalids();
 };
 
 //Bool Matrix struct
@@ -28,6 +28,8 @@ struct BoolMat{
   BoolMat(){};
   ~BoolMat();
   //bool checkNilpotence();
+  void printMat();
+  void clearMat();
 };
 
 //Linked list stuff
@@ -100,18 +102,19 @@ class Graph{
     int currentSize; // Just for loading purposes
     //With this array of Vertex we will have a fixed sized
     Vertex *vertices;
-    void addVertex(Vertex v);
-    void addEdge(Vertex v1, Vertex v2);
   public:
     //Constructor will take pointer to adjacency matrix as pointer, will construct graph from this
     Graph(int);
     ~Graph();
+	void addVertex(Vertex v);
+    void addEdge(Vertex &v1, Vertex &v2);
     //Finds index of vertex in vertices array
-    int findVertex(Vertex v);
+    Vertex* findVertex(int id);
     void setVertsUnvisited();
     void setVertsValid();
-    bool checkConnectivity(Vertex v);
+    bool checkConnectivity(Vertex *v);
     void findHamiltonian(Vertex *v, VertexStack *s);
+	void printVertices();
 };
 
 class Driver{

@@ -10,9 +10,32 @@ bool BoolMat::checkNilpotence(){
 */
 
 //Checks if graph is connected
-bool Graph::checkConnectivity(Vertex v){
-  int index = findVertex(v);
-  return false;
+bool Graph::checkConnectivity(Vertex *v){
+	setVertsUnvisited();
+	VertexStack s(graphSize);
+	VertexQueue q(graphSize);
+	q.push(v);
+	s.push(v);
+	v->visited = true;
+	//cout << "Stacking " << v->id << endl;
+	while(!q.isEmpty()){
+		Vertex *t = q.front();
+		//cout << "Popped " << t->id << endl;
+		q.pop();
+		for(int i = 0; i < t->edges.size(); i++){
+			if(!t->edges[i]->visited){
+				q.push(t->edges[i]);
+				s.push(t->edges[i]);
+				t->edges[i]->visited = true;
+				//cout << "Stacking " << t->edges[i]->id << endl;
+			}
+		}
+	}
+	//cout << "Finished connectivity check" << endl;
+	if(s.isFull()){
+		return true;
+	}
+	return false;
 }
 
 //Finds hamiltonian starting at v
@@ -49,6 +72,12 @@ bool Vertex::isInvalid(Vertex *v){
   return false;
 }
 
+void Vertex::clearInvalids(){
+	for(int i = 0; i < invalids.size(); i++){
+		invalids.pop_back();
+	}
+}
+
 //Matrix structors
 
 BoolMat::BoolMat(int r, int c){
@@ -68,6 +97,24 @@ BoolMat::~BoolMat(){
     delete[] mat[i];
   }
   delete[] mat;
+}
+
+void BoolMat::printMat(){
+	cout << "Printing Matrix: " << endl;
+	for(int i = 0; i < rows; i++){
+		for(int j = 0; j < cols - 1; j++){
+			cout << mat[i][j] << "|";
+		}
+		cout << mat[i][cols - 1] << endl;
+	}
+}
+
+void BoolMat::clearMat(){
+	for(int i = 0; i < rows; i++){
+		for(int j = 0; j < cols; j++){
+			mat[i][j] = 0;
+		}
+	}
 }
 
 //Linked list
@@ -161,9 +208,12 @@ VertexStack::VertexStack(int mSize){
   maxSize = mSize;
   currSize = 0;
   stack = new Vertex*[maxSize];
+  /*
+  //Why is this here?
   for(int i = 0; i < maxSize; i++){
     stack[i]->id = i;
   }
+  */
 }
 
 VertexStack::~VertexStack(){
@@ -251,6 +301,7 @@ void VertexQueue::push(Vertex *v){
     return; 
   }
   else{
+	//cout << "Queueing " << v->id << " at index " << tailIndex << endl;
     q[tailIndex] = v;
     if(tailIndex == maxSize - 1){
       tailIndex = 0;
@@ -276,7 +327,8 @@ void VertexQueue::pop(){
 }
 
 Vertex* VertexQueue::peek(){
-  return q[tailIndex];
+  //cout << "Peeking " << q[tailIndex] << " at tailIndex " << tailIndex << endl;
+  return q[tailIndex - 1];
 }
 
 Vertex* VertexQueue::front(){
@@ -289,11 +341,14 @@ void VertexQueue::printQueue(){
   }
 }
 
-
 Graph::Graph(int graphSize){
   this->graphSize = graphSize;
   vertices = new Vertex[graphSize];
   currentSize = 0;
+  for(int i = 0; i < graphSize; i++){
+	Vertex t(i);
+	vertices[i] = t;
+  }
 }
 
 Graph::~Graph(){
@@ -307,8 +362,18 @@ void Graph::addVertex(Vertex v){
   }
 }
 
-void Graph::addEdge(Vertex v1, Vertex v2){
+void Graph::addEdge(Vertex &v1, Vertex &v2){
+  //cout << "Adding edge from " << v1.id << " to " << v2.id << endl;
   v1.edges.push_back(&v2);
+}
+
+Vertex* Graph::findVertex(int id){
+  for(int i = 0; i < graphSize; i++){
+	if(vertices[i].id == id){
+	  return &vertices[i];
+	}
+  }
+  return NULL;
 }
 
 void Graph::setVertsUnvisited(){
@@ -321,6 +386,16 @@ void Graph::setVertsValid(){
   for(int i = 0; i < graphSize; i++){
     vertices[i].valid = true;
   }
+}
+
+void Graph::printVertices(){
+	for(int i = 0; i < graphSize; i++){
+		cout << vertices[i].id << "|";
+		for(int j = 0; j < vertices[i].edges.size(); j++){
+			cout << vertices[i].edges[j]->id << " ";
+		}
+		cout << endl;
+	}
 }
 
 /*
