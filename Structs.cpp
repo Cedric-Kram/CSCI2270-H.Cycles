@@ -1,44 +1,46 @@
 #include "Structs.hpp"
 using namespace std;
 
-//Core functions of program
-//Or we can skip this
+/*
+Core functions of program
+Or we can skip this
 bool BoolMat::checkNilpotence(){
 
 }
+*/
 
 //Checks if graph is connected
 bool Graph::checkConnectivity(Vertex v){
   int index = findVertex(v);
-
+  return false;
 }
 
 //Finds hamiltonian starting at v
-void Graph::findHamiltonian(Vertex &v, VertexStack &s){
-  s.push(v);
-  for(int i = 0; i < v.edges.size(); i++){
-     if(!v.isInvalid(v.edges[i]){
-       findHamiltonian(v.edges[i], s);
+void Graph::findHamiltonian(Vertex *v, VertexStack *s){
+  s->push(v);
+  for(int i = 0; i < v->edges.size(); i++){
+     if(!v->isInvalid(v->edges[i])){
+       findHamiltonian(v->edges[i], s);
      }
   }
-  if(s.isFull()){
-    Vertex *top = s.peek();
-    Vertex *front = s.front();
+  if(s->isFull()){
+    Vertex *top = s->peek();
+    Vertex *front = s->front();
     for(int j = 0; j < top->edges.size(); j++){
       if(top->edges[j] == front){
         return;
       }
     }
   }
-  Vertex *temp = s.peek();
-  s.pop();
-  if(s.isEmpty()){
+  Vertex *temp = s->peek();
+  s->pop();
+  if(s->isEmpty()){
     return; 
   }
-  s.front()->invalids.push(*temp);
+  s->front()->invalids.push_back(temp);
 }
 
-bool Vertex::isInvalid(Vertex v){
+bool Vertex::isInvalid(Vertex *v){
   for(int i = 0; i < invalids.size(); i++){
     if(invalids[i] == v){
       return true;
@@ -85,12 +87,9 @@ VertexLL::~VertexLL(){
   }
 }
 
-void VertexLL::append(Vertex *n){
-  if(n == NULL){
-    return;
-  }
+void VertexLL::append(Vertex n){
   VertexLLNode *newVertex;
-  newVertex->v = n;
+  newVertex->v = &n;
   if(head == NULL){
     head = newVertex;
     tail = newVertex;
@@ -161,9 +160,9 @@ void VertexLL::printLL(){
 VertexStack::VertexStack(int mSize){
   maxSize = mSize;
   currSize = 0;
-  stack = new Vertex[maxSize];
+  stack = new Vertex*[maxSize];
   for(int i = 0; i < maxSize; i++){
-    stack[i].id = i;
+    stack[i]->id = i;
   }
 }
 
@@ -192,7 +191,7 @@ void VertexStack::push(Vertex *v){
   if(isFull()){
     return;
   }
-  stack[currSize] = *v; // I deferenced it here because we are only poitning to a vertex value.
+  stack[currSize] = v; // I deferenced it here because we are only poitning to a vertex value.
   //Im not sure what this means if it edits the heap stuff to match the deferenced stuff or something else
   currSize++;
 }
@@ -217,7 +216,7 @@ Vertex* VertexStack::front(){
 
 void VertexStack::printStack(){
   for(int i = 0; i < currSize; i++){
-    cout << stack[i].id << endl;
+    cout << stack[i]->id << endl;
   }
 }
 
@@ -226,7 +225,7 @@ VertexQueue::VertexQueue(int mSize){
   currSize = 0;
   headIndex = 0;
   tailIndex = 0;
-  q = new Vertex[maxSize];
+  q = new Vertex*[maxSize];
 }
 
 VertexQueue::~VertexQueue(){
@@ -247,7 +246,7 @@ bool VertexQueue::isEmpty(){
   return false;
 }
 
-void VertexQueue::push(Vertex v){
+void VertexQueue::push(Vertex *v){
   if(isFull()){
     return; 
   }
@@ -286,7 +285,7 @@ Vertex* VertexQueue::front(){
 
 void VertexQueue::printQueue(){
   for(int i = 0; i < currSize; i++){
-    cout << q[v].id << endl; 
+    cout << q[i]->id << endl; 
   }
 }
 
@@ -297,7 +296,9 @@ Graph::Graph(int graphSize){
   currentSize = 0;
 }
 
-Graph::~Graph(){delete vertices[]}
+Graph::~Graph(){
+  delete[] vertices;
+}
 
 void Graph::addVertex(Vertex v){
   if(currentSize >= graphSize){
@@ -307,22 +308,22 @@ void Graph::addVertex(Vertex v){
 }
 
 void Graph::addEdge(Vertex v1, Vertex v2){
-  v1.edges.push_back(v2);
+  v1.edges.push_back(&v2);
 }
 
 void Graph::setVertsUnvisited(){
-  for(int i = 0, i < graphSize, i++){
+  for(int i = 0; i < graphSize; i++){
     vertices[i].visited = false;
   }
 }
 
 void Graph::setVertsValid(){
-  for(int i = 0, i < graphSize, i++){
+  for(int i = 0; i < graphSize; i++){
     vertices[i].valid = true;
   }
 }
 
-
+/*
 //For Constructor
 int split (std::string str, char c, std::string storage[])
 {
@@ -350,7 +351,7 @@ int split (std::string str, char c, std::string storage[])
 Data will be presented just like an adjency matrix. Values are csv
 ROW will be the Source of the edge, and the Column will be the target for the edge
 Since we are NOT considering multiple edges a non-present edge will be a 0, 1 will be present
-*/
+
 Driver::Driver(std::string file){
   fstream reader(file);
   if(reader.fail()){
@@ -379,3 +380,4 @@ Driver::Driver(std::string file){
     }
   }
 }
+*/

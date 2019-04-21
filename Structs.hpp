@@ -13,8 +13,9 @@ struct Vertex{
   Vertex(int num){id = num;}
   Vertex(){};
   vector<Vertex*> edges;
-  vector<Vertex> invalids;
-  bool isInvalid(Vertex v);
+  vector<Vertex*> invalids;
+  bool isInvalid(Vertex *v);
+  
 };
 
 //Bool Matrix struct
@@ -58,18 +59,18 @@ class VertexStack{
   private:
     int maxSize;
     int currSize;
-    Vertex *stack;
+    Vertex **stack;
   public:
     VertexStack(int mSize);
     ~VertexStack();
     bool isFull();
     bool isEmpty();
-    void push(Vertex v);
+    void push(Vertex *v);
     void pop();
     Vertex* peek();
     Vertex* front();
     void printStack();
-    bool inStack(Vertex v);
+    bool inStack(Vertex *v);
 };
 
 //Queue stuff
@@ -80,13 +81,13 @@ class VertexQueue{
     int currSize;
     int headIndex;
     int tailIndex;
-    Vertex *q;
+    Vertex **q;
   public:
     VertexQueue(int mSize);
     ~VertexQueue();
     bool isFull();
     bool isEmpty();
-    void push(Vertex v);
+    void push(Vertex *v);
     void pop();
     Vertex* peek();
     Vertex* front();
@@ -110,7 +111,7 @@ class Graph{
     void setVertsUnvisited();
     void setVertsValid();
     bool checkConnectivity(Vertex v);
-    void findHamiltonian(Vertex v, VertexStack &s);
+    void findHamiltonian(Vertex *v, VertexStack *s);
 };
 
 class Driver{
