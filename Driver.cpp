@@ -21,8 +21,8 @@ void debug(string str){
 void genAdjMatDir(BoolMat *m, int numVerts){
 	for(int i = 0; i < m->rows; i++){
 		for(int j = 0; j < m->cols; j++){
-			m->mat[i][j] = rand()%2;
-			//m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
+			//m->mat[i][j] = rand()%2;
+			m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
 			if(i == j){
 				m->mat[i][j] = 0;
 			}
@@ -34,8 +34,8 @@ void genAdjMatDir(BoolMat *m, int numVerts){
 void genAdjMatUndir(BoolMat *m, int numVerts){
 	for(int i = 0; i < m->rows; i++){
 		for(int j = 0; j < i; j++){
-			m->mat[i][j] = rand()%2;
-			//m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
+			//m->mat[i][j] = rand()%2;
+			m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
 			m->mat[j][i] = m->mat[i][j];
 		}
 	}
@@ -83,22 +83,23 @@ int main(int argc, char const *argv[]){
 	//Checks connectivity of graph
 	VertexLL *cons = new VertexLL;
 	Vertex *t;
-	std::cout << numVerts << std::endl;
+	//cout << numVerts << endl;
 	for(int i = 0; i < numVerts; i++){
-		cout << "Size: " << g->getSize() << endl;
+		//cout << "Size: " << g->getSize() << endl;
 		t = g->findVertex(i);
 		if(g->checkConnectivity(t)){
-			cout << "Graph is connected from root node " << i << endl;
-			cout << "ADDDING "<<  t->id << endl;
+			//cout << "Graph is connected from root node " << i << endl;
+			//cout << "ADDDING "<<  t->id << endl;
 			cons->append(t);
 			//cons.getHead()
-			debug("A2");
+			//debug("A2");
 		}
 		else{
-			cout << "Graph is not connected from root node " << i << endl;
-			debug("A3");
+			//cout << "Graph is not connected from root node " << i << endl;
+			//debug("A3");
 		}
 	}
-	cout << endl << "Printing list of connected vertices..." << endl;
+	cout << endl << "Graph is connected from nodes: " << endl;
 	cons->printLL();
+	
 }

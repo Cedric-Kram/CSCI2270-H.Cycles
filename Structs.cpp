@@ -17,21 +17,21 @@ bool Graph::checkConnectivity(Vertex *v){
 	q.push(v);
 	s.push(v);
 	v->visited = true;
-	cout << "Stacking " << v->id << endl;
+	//cout << "Stacking " << v->id << endl;
 	while(!q.isEmpty()){
 		Vertex *t = q.front();
-		cout << "Popped " << t->id << endl;
+		//cout << "Popped " << t->id << endl;
 		q.pop();
 		for(int i = 0; i < t->edges.size(); i++){
 			if(!t->edges[i]->visited){
 				q.push(t->edges[i]);
 				s.push(t->edges[i]);
 				t->edges[i]->visited = true;
-				cout << "Stacking " << t->edges[i]->id << endl;
+				//cout << "Stacking " << t->edges[i]->id << endl;
 			}
 		}
 	}
-	cout << "Finished connectivity check" << endl;
+	//cout << "Finished connectivity check" << endl;
 	if(s.isFull()){
 		return true;
 	}
@@ -141,7 +141,7 @@ void VertexLL::append(Vertex *n){
 	//cout << "A" << endl;
   newVertex->v = n;
 	//cout << "B" << endl;
-	cout << "APPENDING NEW VERTEX TO LL " << newVertex->v->id << endl;
+	//cout << "APPENDING NEW VERTEX TO LL " << newVertex->v->id << endl;
   if(head == NULL){
     head = newVertex;
     tail = newVertex;
@@ -202,9 +202,19 @@ VertexLLNode* VertexLL::getTail(){
 void VertexLL::printLL(){
   VertexLLNode* t = head;
 	//cout << t->v->id << endl;
+  int token = 1;
+  cout << t->v->id << " ";
+  t = t->next;
   while(t != NULL){
-    cout << t->v->id << endl;
-    t = t->next;
+    if(token%20){
+	  cout << t->v->id << " ";
+	  t = t->next;
+	}
+	else{
+	  cout << t->v->id << endl << "  ";
+	  t = t->next;
+	}
+	token++;
   }
 }
 
