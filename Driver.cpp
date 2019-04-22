@@ -65,13 +65,13 @@ int main(int argc, char const *argv[]){
 	//Seeds random number generator & determines size of graph
 	srand((unsigned)time(0));
 	int numVerts = stoi(argv[1]);
-	
+
 	//Creates the adjacency matrix
 	BoolMat *m;
 	m = new BoolMat(numVerts, numVerts);
 	genAdjMatDir(m, numVerts);
 	m->printMat();
-	
+
 	//Initializes graph from adjacency matrix
 	cout << endl << "Generating Graph..." << endl;
 	Graph *g;
@@ -79,16 +79,19 @@ int main(int argc, char const *argv[]){
 	genGraphFromAdjMat(g, m);
 	g->printVertices();
 	cout << "Graph generated succesfully" << endl << endl;
-	
+
 	//Checks connectivity of graph
-	VertexLL cons;
+	VertexLL *cons = new VertexLL;
 	Vertex *t;
+	std::cout << numVerts << std::endl;
 	for(int i = 0; i < numVerts; i++){
 		cout << "Size: " << g->getSize() << endl;
 		t = g->findVertex(i);
 		if(g->checkConnectivity(t)){
 			cout << "Graph is connected from root node " << i << endl;
-			cons.append(*t);
+			cout << "ADDDING "<<  t->id << endl;
+			cons->append(t);
+			//cons.getHead()
 			debug("A2");
 		}
 		else{
@@ -97,5 +100,5 @@ int main(int argc, char const *argv[]){
 		}
 	}
 	cout << endl << "Printing list of connected vertices..." << endl;
-	cons.printLL();
+	cons->printLL();
 }

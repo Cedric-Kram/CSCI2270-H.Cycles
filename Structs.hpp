@@ -47,7 +47,7 @@ class VertexLL{
   public:
     VertexLL();
     ~VertexLL();
-    void append(Vertex n);
+    void append(Vertex *n);
     void remove(int id);
     VertexLLNode* findVertexNode(int id);
     void printLL();

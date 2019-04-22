@@ -58,7 +58,7 @@ void Graph::findHamiltonian(Vertex *v, VertexStack *s){
   Vertex *temp = s->peek();
   s->pop();
   if(s->isEmpty()){
-    return; 
+    return;
   }
   s->front()->invalids.push_back(temp);
 }
@@ -134,10 +134,14 @@ VertexLL::~VertexLL(){
   }
 }
 
-void VertexLL::append(Vertex n){
-	cout << "A" << endl;
-  VertexLLNode *newVertex;
-  newVertex->v = &n;
+void VertexLL::append(Vertex *n){
+	//cout << "A" << endl;
+  VertexLLNode *newVertex = new VertexLLNode;
+	//newVertex->next = NULL;
+	//cout << "A" << endl;
+  newVertex->v = n;
+	//cout << "B" << endl;
+	cout << "APPENDING NEW VERTEX TO LL " << newVertex->v->id << endl;
   if(head == NULL){
     head = newVertex;
     tail = newVertex;
@@ -197,6 +201,7 @@ VertexLLNode* VertexLL::getTail(){
 
 void VertexLL::printLL(){
   VertexLLNode* t = head;
+	//cout << t->v->id << endl;
   while(t != NULL){
     cout << t->v->id << endl;
     t = t->next;
@@ -262,7 +267,7 @@ Vertex* VertexStack::peek(){
 }
 
 Vertex* VertexStack::front(){
-  return stack[0]; 
+  return stack[0];
 }
 
 void VertexStack::printStack(){
@@ -299,7 +304,7 @@ bool VertexQueue::isEmpty(){
 
 void VertexQueue::push(Vertex *v){
   if(isFull()){
-    return; 
+    return;
   }
   else{
 	//cout << "Queueing " << v->id << " at index " << tailIndex << endl;
@@ -338,7 +343,7 @@ Vertex* VertexQueue::front(){
 
 void VertexQueue::printQueue(){
   for(int i = 0; i < currSize; i++){
-    cout << q[i]->id << endl; 
+    cout << q[i]->id << endl;
   }
 }
 
