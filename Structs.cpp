@@ -17,21 +17,21 @@ bool Graph::checkConnectivity(Vertex *v){
 	q.push(v);
 	s.push(v);
 	v->visited = true;
-	//cout << "Stacking " << v->id << endl;
+	cout << "Stacking " << v->id << endl;
 	while(!q.isEmpty()){
 		Vertex *t = q.front();
-		//cout << "Popped " << t->id << endl;
+		cout << "Popped " << t->id << endl;
 		q.pop();
 		for(int i = 0; i < t->edges.size(); i++){
 			if(!t->edges[i]->visited){
 				q.push(t->edges[i]);
 				s.push(t->edges[i]);
 				t->edges[i]->visited = true;
-				//cout << "Stacking " << t->edges[i]->id << endl;
+				cout << "Stacking " << t->edges[i]->id << endl;
 			}
 		}
 	}
-	//cout << "Finished connectivity check" << endl;
+	cout << "Finished connectivity check" << endl;
 	if(s.isFull()){
 		return true;
 	}
@@ -135,6 +135,7 @@ VertexLL::~VertexLL(){
 }
 
 void VertexLL::append(Vertex n){
+	cout << "A" << endl;
   VertexLLNode *newVertex;
   newVertex->v = &n;
   if(head == NULL){
@@ -370,7 +371,8 @@ void Graph::addEdge(Vertex &v1, Vertex &v2){
 Vertex* Graph::findVertex(int id){
   for(int i = 0; i < graphSize; i++){
 	if(vertices[i].id == id){
-	  return &vertices[i];
+	  Vertex *t = &vertices[i];
+	  return t;
 	}
   }
   return NULL;
@@ -378,6 +380,7 @@ Vertex* Graph::findVertex(int id){
 
 void Graph::setVertsUnvisited(){
   for(int i = 0; i < graphSize; i++){
+	//cout << graphSize << endl;
     vertices[i].visited = false;
   }
 }
@@ -396,6 +399,10 @@ void Graph::printVertices(){
 		}
 		cout << endl;
 	}
+}
+
+int Graph::getSize(){
+	return graphSize;
 }
 
 /*

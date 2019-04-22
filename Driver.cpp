@@ -1,16 +1,28 @@
 #include "Structs.hpp"
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 using namespace std;
+
+//Basically repeated bernoulli trials
+int expRand(int base_mod, int power){
+	int total = 1;
+	for(int i = 0; i < power; i++){
+		total = total*(rand()%2);
+	}
+	return total;
+}
 
 void debug(string str){
 	cout << str << endl;
 }
 
-void genAdjMatDir(BoolMat *m){
+//Generates adjacency matrix for directed graph
+void genAdjMatDir(BoolMat *m, int numVerts){
 	for(int i = 0; i < m->rows; i++){
 		for(int j = 0; j < m->cols; j++){
 			m->mat[i][j] = rand()%2;
+			//m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
 			if(i == j){
 				m->mat[i][j] = 0;
 			}
@@ -18,10 +30,12 @@ void genAdjMatDir(BoolMat *m){
 	}
 }
 
-void genAdjMatUndir(BoolMat *m){
+//Generates adjacency matrix for undirected graph
+void genAdjMatUndir(BoolMat *m, int numVerts){
 	for(int i = 0; i < m->rows; i++){
 		for(int j = 0; j < i; j++){
 			m->mat[i][j] = rand()%2;
+			//m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
 			m->mat[j][i] = m->mat[i][j];
 		}
 	}
@@ -40,16 +54,25 @@ void genGraphFromAdjMat(Graph *g, BoolMat *m){
 		}
 	}
 }
-//*/
-int main(){
+
+bool test(){
+	debug("Testing~");
+	return true;
+}
+
+//Requires single argument, a positive integer representing number of vertices in graph
+int main(int argc, char const *argv[]){
+	//Seeds random number generator & determines size of graph
 	srand((unsigned)time(0));
-	int numVerts = 5;
+	int numVerts = stoi(argv[1]);
 	
+	//Creates the adjacency matrix
 	BoolMat *m;
 	m = new BoolMat(numVerts, numVerts);
-	genAdjMatDir(m);
+	genAdjMatDir(m, numVerts);
 	m->printMat();
 	
+	//Initializes graph from adjacency matrix
 	cout << endl << "Generating Graph..." << endl;
 	Graph *g;
 	g = new Graph(numVerts);
@@ -57,15 +80,22 @@ int main(){
 	g->printVertices();
 	cout << "Graph generated succesfully" << endl << endl;
 	
-	VertexStack s(numVerts);
+	//Checks connectivity of graph
+	VertexLL cons;
+	Vertex *t;
 	for(int i = 0; i < numVerts; i++){
-		Vertex *t = g->findVertex(i);
+		cout << "Size: " << g->getSize() << endl;
+		t = g->findVertex(i);
 		if(g->checkConnectivity(t)){
 			cout << "Graph is connected from root node " << i << endl;
+			cons.append(*t);
+			debug("A2");
 		}
 		else{
 			cout << "Graph is not connected from root node " << i << endl;
+			debug("A3");
 		}
 	}
-	
+	cout << endl << "Printing list of connected vertices..." << endl;
+	cons.printLL();
 }

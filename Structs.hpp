@@ -115,6 +115,7 @@ class Graph{
     bool checkConnectivity(Vertex *v);
     void findHamiltonian(Vertex *v, VertexStack *s);
 	void printVertices();
+	int getSize();
 };
 
 class Driver{
