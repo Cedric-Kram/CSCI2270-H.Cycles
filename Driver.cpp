@@ -1,5 +1,6 @@
 #include "Structs.hpp"
 #include <cstdlib>
+#include <vector>
 #include <ctime>
 #include <cmath>
 using namespace std;
@@ -21,8 +22,8 @@ void debug(string str){
 void genAdjMatDir(BoolMat *m, int numVerts){
 	for(int i = 0; i < m->rows; i++){
 		for(int j = 0; j < m->cols; j++){
-			//m->mat[i][j] = rand()%2;
-			m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
+			m->mat[i][j] = rand()%2;
+			//m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
 			if(i == j){
 				m->mat[i][j] = 0;
 			}
@@ -58,6 +59,37 @@ void genGraphFromAdjMat(Graph *g, BoolMat *m){
 bool test(){
 	debug("Testing~");
 	return true;
+}
+
+void methodOne(Vertex *Start, Vertex *v, vector<Vertex> path, int Size){
+	if(path.size() ==  Size){
+		bool flag;
+		for(int i = 0; i < path[Size-1].edges.size(); i++){
+			if(path[Size-1].edges[i]->id == Start->id) flag = true;
+		}
+		if(flag){
+			for(int i =0; i < path.size(); i++){
+				std::cout << path[i].id << " ";
+			}
+			std::cout << Start->id;
+			std::cout<<std::endl;
+		}
+		return;
+	}
+	for(int i = 0; i < v->edges.size();i++){
+		//std::cout << "Check Point 1: (Vertex Source)" << v->id  << " Checking (Termial) " << v->edges[i]->id << std::endl;
+		if(!v->edges[i]->visited){
+
+			v->edges[i]->visited = true;
+			path.push_back(*v->edges[i]);
+
+			//cout << "Path Size:" << path.size() << endl;
+			methodOne(Start ,v->edges[i], path, Size);
+
+			v->edges[i]->visited = false;
+			path.pop_back();
+		}
+	}
 }
 
 //Requires single argument, a positive integer representing number of vertices in graph
@@ -101,5 +133,15 @@ int main(int argc, char const *argv[]){
 	}
 	cout << endl << "Graph is connected from nodes: " << endl;
 	cons->printLL();
-	
+
+	cout << endl;
+	std::cout << "Print Ham Paths from Method One: " << std::endl;
+	Vertex *temp;
+	g->setVertsUnvisited();
+	temp = g->findVertex(0);
+	temp->visited = true;
+	vector<Vertex> path;
+	path.push_back(*temp);
+	methodOne(temp,temp, path, std::stoi(argv[1]));
+
 }
