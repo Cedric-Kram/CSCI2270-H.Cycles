@@ -1,16 +1,11 @@
 #include "Structs.hpp"
 using namespace std;
 
-/*
-Core functions of program
-Or we can skip this
-bool BoolMat::checkNilpotence(){
-
-}
-*/
-
 //Checks if graph is connected
 bool Graph::checkConnectivity(Vertex *v){
+	if(v == NULL){
+		return false;
+	}
 	setVertsUnvisited();
 	VertexStack s(graphSize);
 	VertexQueue q(graphSize);
@@ -40,12 +35,17 @@ bool Graph::checkConnectivity(Vertex *v){
 
 //Finds hamiltonian starting at v
 void Graph::findHamiltonian(Vertex *v, VertexStack *s){
+//cout << v->id << endl;
   s->push(v);
+  //s->printStack();
+  //cout << endl;
+  v->visited = true;
   for(int i = 0; i < v->edges.size(); i++){
-     if(!v->isInvalid(v->edges[i])){
-       findHamiltonian(v->edges[i], s);
-     }
-  }
+	  if(!v->edges[i]->visited && !v->isInvalid(v->edges[i])){
+		findHamiltonian(v->edges[i], s);
+	  }
+	  v->clearInvalids();
+	}
   if(s->isFull()){
     Vertex *top = s->peek();
     Vertex *front = s->front();
@@ -55,12 +55,58 @@ void Graph::findHamiltonian(Vertex *v, VertexStack *s){
       }
     }
   }
-  Vertex *temp = s->peek();
+  v->visited = false;
   s->pop();
+  //s->printStack();
+  //cout << endl;
   if(s->isEmpty()){
     return;
   }
-  s->front()->invalids.push_back(temp);
+  Vertex *temp = s->peek();
+  temp->invalids.push_back(v);
+}
+
+//
+void Graph::findHamiltonians(VertexStack *s, vector<VertexStack> cycles){
+	//s->printStack(); cout << endl;
+	if(s->isFull()){
+		cout << "Stack is full" << endl;
+		bool flag;
+		for(int i = 0; i < s->peek()->edges.size(); i++){
+			if(s->peek()->edges[i]->id == vertices[0].id){
+				flag = true;
+			}
+		}
+		if(flag){
+			cycles.push_back(*s);
+		}
+		return;
+	}
+	else{
+	Vertex* temp = s->peek();
+	if(temp){
+		for(int i = 0; i < temp->edges.size();i++){
+		if(!temp->edges[i]->visited){
+			//cout << "A1 ";
+			temp->edges[i]->visited = true;
+			
+			s->push(temp->edges[i]);
+
+			//cout << "A2 ";
+			findHamiltonians(s, cycles);
+			
+			cout << "A3 ";
+			temp->edges[i]->visited = false;
+			cout << "A4 ";
+			s->pop();
+			if(s->isEmpty()){
+				cout << "Stack is empty" << endl;
+			}
+		}
+		}
+		
+	}
+	}
 }
 
 bool Vertex::isInvalid(Vertex *v){
@@ -109,6 +155,7 @@ void BoolMat::printMat(){
 	}
 }
 
+/*
 void BoolMat::clearMat(){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < cols; j++){
@@ -116,6 +163,7 @@ void BoolMat::clearMat(){
 		}
 	}
 }
+*/
 
 //Linked list
 
@@ -216,6 +264,7 @@ void VertexLL::printLL(){
 	}
 	token++;
   }
+  cout << endl;
 }
 
 //Stack
@@ -281,9 +330,30 @@ Vertex* VertexStack::front(){
 }
 
 void VertexStack::printStack(){
-  for(int i = 0; i < currSize; i++){
-    cout << stack[i]->id << endl;
+  if(isEmpty()){
+	return;
   }
+  for(int i = 0; i < currSize; i++){
+    if((i+1)%20){
+		cout << stack[i]->id << " ";
+	}
+	else{
+		cout << stack[i]->id << endl << "  ";
+	}
+  }
+}
+
+bool VertexStack::inStack(Vertex *v){
+	for(int i = 0; i < maxSize; i++){
+		if(stack[i] == v){
+			return true;
+		}
+	}
+	return false;
+}
+
+int VertexStack::getSize(){
+	return currSize;
 }
 
 VertexQueue::VertexQueue(int mSize){
@@ -419,62 +489,3 @@ void Graph::printVertices(){
 int Graph::getSize(){
 	return graphSize;
 }
-
-/*
-//For Constructor
-int split (std::string str, char c, std::string storage[])
-{
-    if (str.length() == 0) {
-        return 0;
-    }
-    std::string word = "";
-    int j = 0;
-    str = str + c;
-    for (int i = 0; i < str.length(); i++)
-    {
-        if (str[i] == c)
-        {
-        	if (word.length() == 0) continue;
-            storage[j] = word;
-            j++;
-            word = "";
-        } else {
-            word = word + str[i];
-        }
-    }
-    return j ;
-}
-/*
-Data will be presented just like an adjency matrix. Values are csv
-ROW will be the Source of the edge, and the Column will be the target for the edge
-Since we are NOT considering multiple edges a non-present edge will be a 0, 1 will be present
-
-Driver::Driver(std::string file){
-  fstream reader(file);
-  if(reader.fail()){
-    std::cerr << "Bad File Name" << std::endl;
-  }
-  std::string line;
-  int pos = 1;
-  std::getline(reader,line);
-  for(int i = 0; i < line.length(); i++){
-    if(line[i] == ',') pos++;
-  }
-  //Im pretty sure there has to better way to do this.
-  //But Right now this is how it is going to be done
-  BoolMat matrix(pos,pos);
-  adjacencyMatrix = matrix;
-  reader.clear();
-  reader.seekg(0, ios::beg);
-  while(std::getline(reader,line)){
-    std::istringstream ss(line);
-    while(std::getline(ss,status,',')){
-      if(std::stoi(status)){
-        adjacencyMatrix.mat[row][col] = true;
-      } else {
-        adjacencyMatrix.mat[row][col] = false;
-      }
-    }
-  }
-}
-*/

@@ -1,3 +1,5 @@
+//This was a prototype for the algorithm to find cycles
+
 #include <iostream>
 
 bool safe(int vert, bool graph[][5], int path[], int pos, int size){

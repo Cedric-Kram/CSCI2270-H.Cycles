@@ -29,7 +29,7 @@ struct BoolMat{
   ~BoolMat();
   //bool checkNilpotence();
   void printMat();
-  void clearMat();
+  //void clearMat();
 };
 
 //Linked list stuff
@@ -73,6 +73,7 @@ class VertexStack{
     Vertex* front();
     void printStack();
     bool inStack(Vertex *v);
+	int getSize();
 };
 
 //Queue stuff
@@ -114,15 +115,7 @@ class Graph{
     void setVertsValid();
     bool checkConnectivity(Vertex *v);
     void findHamiltonian(Vertex *v, VertexStack *s);
+	void findHamiltonians(VertexStack *s, vector<VertexStack> cycles);
 	void printVertices();
 	int getSize();
-};
-
-class Driver{
-  private:
-    BoolMat adjacencyMatrix;
-    //int getSize(std::string); // Finds Size of giving matrix file
-  public:
-    Driver(std::string); //Loading a graph from file
-    Driver(int); //Generating a random graph of n vertexes;
 };

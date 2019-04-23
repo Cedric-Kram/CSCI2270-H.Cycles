@@ -1,29 +1,14 @@
 #include "Structs.hpp"
 #include <cstdlib>
-#include <vector>
 #include <ctime>
 #include <cmath>
 using namespace std;
-
-//Basically repeated bernoulli trials
-int expRand(int base_mod, int power){
-	int total = 1;
-	for(int i = 0; i < power; i++){
-		total = total*(rand()%2);
-	}
-	return total;
-}
-
-void debug(string str){
-	cout << str << endl;
-}
 
 //Generates adjacency matrix for directed graph
 void genAdjMatDir(BoolMat *m, int numVerts){
 	for(int i = 0; i < m->rows; i++){
 		for(int j = 0; j < m->cols; j++){
 			m->mat[i][j] = rand()%2;
-			//m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
 			if(i == j){
 				m->mat[i][j] = 0;
 			}
@@ -35,32 +20,35 @@ void genAdjMatDir(BoolMat *m, int numVerts){
 void genAdjMatUndir(BoolMat *m, int numVerts){
 	for(int i = 0; i < m->rows; i++){
 		for(int j = 0; j < i; j++){
-			//m->mat[i][j] = rand()%2;
-			m->mat[i][j] = expRand(2, (int)sqrt(numVerts));
+			m->mat[i][j] = rand()%2;
 			m->mat[j][i] = m->mat[i][j];
 		}
 	}
 }
 
+//Generates adjacency matrix for directed graph
 void genGraphFromAdjMat(Graph *g, BoolMat *m){
 	for(int i = 0; i < m->rows; i++){
 		for(int j = 0; j < m->cols; j++){
 			if(m->mat[i][j]){
-				//cout << i << j << endl;
 				Vertex *v1 = g->findVertex(i);
 				Vertex *v2 = g->findVertex(j);
-				//cout << v1 << "|" << v2 << endl;
 				g->addEdge(*v1, *v2);
 			}
 		}
 	}
 }
 
-bool test(){
-	debug("Testing~");
-	return true;
+//Function to store stack in a linked list
+void convertStackToList(VertexStack *s, VertexLL *l){
+	while(!s->isEmpty()){
+		Vertex* temp = s->peek();
+		l->append(temp);
+		s->pop();
+	}
 }
 
+//Method to find all cycles that does not use graphs class
 void methodOne(Vertex *Start, Vertex *v, vector<Vertex> path, int Size){
 	if(path.size() ==  Size){
 		bool flag;
@@ -92,8 +80,11 @@ void methodOne(Vertex *Start, Vertex *v, vector<Vertex> path, int Size){
 	}
 }
 
-//Requires single argument, a positive integer representing number of vertices in graph
+//Arguments:
+//1) Positive integer corresponding to the desired number of vertices in the graph
+	
 int main(int argc, char const *argv[]){
+	
 	//Seeds random number generator & determines size of graph
 	srand((unsigned)time(0));
 	int numVerts = stoi(argv[1]);
@@ -101,6 +92,7 @@ int main(int argc, char const *argv[]){
 	//Creates the adjacency matrix
 	BoolMat *m;
 	m = new BoolMat(numVerts, numVerts);
+	//genAdjMatUndir(m, numVerts);
 	genAdjMatDir(m, numVerts);
 	m->printMat();
 
@@ -115,33 +107,63 @@ int main(int argc, char const *argv[]){
 	//Checks connectivity of graph
 	VertexLL *cons = new VertexLL;
 	Vertex *t;
-	//cout << numVerts << endl;
 	for(int i = 0; i < numVerts; i++){
-		//cout << "Size: " << g->getSize() << endl;
 		t = g->findVertex(i);
+		//cout << t << endl;
 		if(g->checkConnectivity(t)){
-			//cout << "Graph is connected from root node " << i << endl;
-			//cout << "ADDDING "<<  t->id << endl;
 			cons->append(t);
-			//cons.getHead()
-			//debug("A2");
-		}
-		else{
-			//cout << "Graph is not connected from root node " << i << endl;
-			//debug("A3");
 		}
 	}
-	cout << endl << "Graph is connected from nodes: " << endl;
-	cons->printLL();
-
-	cout << endl;
-	std::cout << "Print Ham Paths from Method One: " << std::endl;
-	Vertex *temp;
-	g->setVertsUnvisited();
-	temp = g->findVertex(0);
-	temp->visited = true;
-	vector<Vertex> path;
-	path.push_back(*temp);
-	methodOne(temp,temp, path, std::stoi(argv[1]));
-
+	//cout << cons->getHead() << endl;
+	VertexStack *s = new VertexStack(numVerts);
+	vector<VertexLL*> cycles;
+	//vector<VertexStack> cycles;
+	
+	if(cons->getHead() == NULL){
+		cout << "No connected nodes found, Graph has no Hamiltonian cycles" << endl;
+	}
+	else{
+		t = cons->getHead()->v;
+		//Prints list of nodes on which graph is connected
+		cout << endl << "Graph is connected from nodes: " << endl;
+		cons->printLL();
+		cout << endl;
+		
+		/*
+		g->setVertsUnvisited();
+		t->visited = true;
+		s->push(t);
+		g->findHamiltonians(s, cycles);
+		*/
+		VertexLLNode *temp = cons->getHead();
+		while(temp != NULL){	
+			t = temp->v;
+			//Finds Hamiltonian cycle, if there are any connected nodes
+			g->setVertsUnvisited();
+			cout << "Starting at vertex " << t->id << ": ";
+			VertexStack *s = new VertexStack(numVerts);
+			g->findHamiltonian(t, s);
+			if(s->isEmpty()){
+				cout << "No Hamiltonian cycle found" << endl;
+			}
+			else{
+				cout << "Hamiltonian cycle found: ";
+				s->printStack();
+				cout << endl;
+				VertexLL* l = new VertexLL;
+				convertStackToList(s, l);
+				cycles.push_back(l);
+			}
+			temp = temp->next;
+			cout << endl;
+		}
+		cout << "Using method one to print all Ham cycles:" << endl;
+		Vertex *tempa;
+		g->setVertsUnvisited();
+		tempa = g->findVertex(0);
+		tempa->visited = true;
+		vector<Vertex> path;
+		path.push_back(*tempa);
+		methodOne(tempa,tempa, path, stoi(argv[1]));
+	}
 }
